@@ -1,7 +1,7 @@
 <template>
       <v-app-bar
       app
-      color="grey lighten-2"
+      color="yellow accent-3"
       dark
       elevate-on-scroll
       height="50"
@@ -19,15 +19,6 @@
       </div>
 
       <v-spacer></v-spacer>
-
-      <!-- <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn> -->
     </v-app-bar>
 </template>
 

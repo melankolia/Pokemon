@@ -1,3 +1,8 @@
 export const initialPokemonState = () => ({
-    pokemonList: []
+    listPokemon: [],
+    loading: false,
+    urlPage: {
+        next: null,
+    },
+    limit: 200
 });
