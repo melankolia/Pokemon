@@ -1,9 +1,9 @@
 <template>
   <v-card
-    color="teal accent-4"
     min-width="200px"
     class="card rounded-xl"
     @click="handleClick"
+    :style="{ 'background-image': 'url(' + backgroundImage + ')' }"
   >
     <div class="d-flex flex-no-wrap justify-space-between">
         <div>
@@ -31,19 +31,30 @@
 </template>
 
 <script>
+import { DETAIL } from "@/router/name.types";
+import Grass from "@/assets/grass.png";
+
 export default {
     props: {
         pokemon: { type: Object, required: false }
     },
+    data: () => ({
+        backgroundImage: Grass
+    }),
     methods: {
         handleClick() {
-            console.log(this.pokemon);
+            this.$router.push({ name: DETAIL.ROOT, params: { id: this.pokemon.id } });
         }
     }
 }
 </script>
 
 <style scoped>
+
+.card {
+    background-repeat: repeat;
+}
+
 .card:hover {
     transform: translate(-4px);
     box-shadow: 4px 4px 0px lightgrey;

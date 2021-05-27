@@ -6,7 +6,7 @@ Vue.mixin({
             clearTimeout(this._timerId);
             this._timerId = setTimeout(() => {
               callback();
-            }, 500);
+            }, 1000);
         },
         parsingParams(arg) {
             const params = arg?.split("?")[1];

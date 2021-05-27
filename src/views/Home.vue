@@ -17,7 +17,6 @@
       item-text="name"
       item-value="name"
       clearable
-      @click:clear="() => getList()"
     >
       <template v-slot:selection="{ item }">
         <span>{{ item.name | toTitle }}</span>
@@ -33,7 +32,7 @@
         </v-col>
       </v-row>
       <v-row v-else>
-        <v-col v-for="(item, index) in [...Array(10)]" cols="12" xs="12" sm="4" md="3" :key="index">
+        <v-col v-for="(item, index) in [...Array(4)]" cols="12" xs="12" sm="4" md="3" :key="index">
           <v-skeleton-loader
             class='mb-6 rounded-xl'
             elevation="1"
@@ -51,7 +50,7 @@
           <v-icon small>navigate_before</v-icon>
           Previous
         </v-btn>
-        <v-btn class="rounded-lg" @click="() => page++" color="primary">
+        <v-btn class="rounded-lg" :disabled="page >= totalPage" @click="() => page++" color="primary">
           Next
           <v-icon>navigate_next</v-icon>
         </v-btn>
@@ -62,8 +61,10 @@
 
 <script>
 const PokeCard = () => import("@/components/Cards/pokemon");
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 import { FETCH_POKEMON_LIST } from "@/store/constant/actions.type";
+import { RESET_STATE } from "@/store/constant/mutations.type";
+
 
 export default {
   components: {
@@ -75,26 +76,38 @@ export default {
     count: null,
     select: null,
     search: null,
+    totalPage: 1,
     page: 1,
     limit: 20,
+    filtering: false
   }),
   methods: {
     ...mapActions({fetchData: FETCH_POKEMON_LIST}),
+    ...mapMutations({resetState: RESET_STATE}),
     getList(limit = 20, page = 1) {
-      this.listPokemon = [...this.getPokemonList(limit, (page - 1) * limit)];
+      const { listPokemon, totalPage } = this.getPokemonList(limit, (page - 1) * limit);
+      
+      this.listPokemon = [...listPokemon];
+      this.filtering = false;
+      this.totalPage = totalPage;
     },
-    filterData(val) {
-      const filtered = this.filteringData(val);
-      if (filtered.length < 1) {
-        this.fetchingData();
+    filterData(val, limit = 20, page = 1) {
+      const { listPokemon, totalPage, stop } = this.filteringData(val, limit, (page - 1) * limit);
+
+      if (listPokemon.length < 1) {
+        if (!stop) this.fetchingData(() => this.filterData(this.search, this.limit));
+        else if (stop) this.fetchingData();
       } else {
-        this.listPokemon = [...filtered];
+        this.listPokemon = [...listPokemon];
+        this.filtering = true;
+        this.totalPage = totalPage;
       }
     },
-    fetchingData() {
+    fetchingData(callback) {
       this.fetchData()
       .then(() => {
         this.getList(this.limit, this.page);
+        callback && callback();
       })
       .catch(err => console.error(err));
     }
@@ -108,10 +121,10 @@ export default {
       this.debounce(() => val ? this.filterData(val) : this.getList());
     },
     select(val) {
-      val ? this.filterData(val) : this.getList();
+      val && this.filterData(val)
     },
     page(val) {
-      val && this.getList(this.limit, val);
+      val && this.filtering ? this.filterData(this.search, this.limit, val) : this.getList(this.limit, val);
     },
     loading(val) {
       !val && (this.itemSearch = [...this.getAllPokemonList]);
@@ -123,6 +136,7 @@ export default {
       getPokemonList: "getPokemonList",
       filteringData: "filteringData",
       getAllPokemonList: "getAllPokemonList",
+      getEtc: "getEtc"
     }),
     isFirst() {
       return this.page <= 1;
