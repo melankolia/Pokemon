@@ -35,6 +35,11 @@ Pokedex, using data from [PokeAPI](https://pokeapi.co/)
 You can see the Live Demo Web 
 Here [https://pokemon-wisatabook.netlify.app/](https://pokemon-wisatabook.netlify.app/)
 
+## Technologies
+- Vue
+- VueX
+- Vuetify
+- Axios
 
 
 ## Contributors
