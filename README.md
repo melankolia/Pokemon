@@ -1,6 +1,5 @@
 # Pokemon Wisatabook
 <p align="center">
-  <image align="center" width="90" src='./src/assets/logo.png' />
   <image align="center" width="80" src='./src/assets/logo.svg' />
 </p>
 <p style="font-size:12" align="center">
@@ -43,6 +42,7 @@ Here [https://pokemon-wisatabook.netlify.app/](https://pokemon-wisatabook.netlif
   <table>
     <tr>
       <td align="center">
+        <img width="100" src="https://avatars.githubusercontent.com/u/35604017?v=4" alt="Ageng Setyo Nugroho"><br/>
         <a href="https://github.com/melankolia">
           <sub><b>Ageng Setyo Nugroho</b></sub>
         </a>
