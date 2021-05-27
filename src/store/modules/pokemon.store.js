@@ -17,7 +17,7 @@ const getters = {
         listPokemon = listPokemon.slice(offset, (limit + offset));
         return {
             listPokemon,
-            totalPage: state.totalPage
+            totalPage: state.pokemon.totalPage
         }
     },
     getLoading(state) {
