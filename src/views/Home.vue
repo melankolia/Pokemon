@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <p class="font-weight-medium text-h4 py-6 px-2 mb-0">
-      <b>Pokedex</b>
+      <b>POKéDEX</b>
     </p>
     <v-autocomplete
       v-model="select"
@@ -47,7 +47,7 @@
     <v-row class="text-center mt-12 mb-2" align="center" justify="center">
       <v-col cols="12">
         <v-btn class="mr-4 rounded-lg" :disabled="isFirst" @click="() => page--" color="error">
-          <v-icon small>navigate_before</v-icon>
+          <v-icon>navigate_before</v-icon>
           Previous
         </v-btn>
         <v-btn class="rounded-lg" :disabled="page >= totalPage" @click="() => page++" color="primary">
@@ -65,7 +65,6 @@ import { mapActions, mapGetters, mapMutations } from "vuex";
 import { FETCH_POKEMON_LIST } from "@/store/constant/actions.type";
 import { RESET_STATE } from "@/store/constant/mutations.type";
 
-
 export default {
   components: {
     PokeCard
@@ -78,18 +77,18 @@ export default {
     search: null,
     totalPage: 1,
     page: 1,
-    limit: 20,
-    filtering: false
+    limit: 8,
+    filtering: false,
   }),
   methods: {
     ...mapActions({fetchData: FETCH_POKEMON_LIST}),
     ...mapMutations({resetState: RESET_STATE}),
-    getList(limit = 20, page = 1) {
-      const { listPokemon, totalPage } = this.getPokemonList(limit, (page - 1) * limit);
+    getList(limit = 8, page = 1) {
+      const result = this.getPokemonList(limit, (page - 1) * limit);
       
-      this.listPokemon = [...listPokemon];
+      this.listPokemon = [...result.listPokemon];
       this.filtering = false;
-      this.totalPage = totalPage;
+      this.totalPage = result.totalPage;
     },
     filterData(val, limit = 20, page = 1) {
       const { listPokemon, totalPage, stop } = this.filteringData(val, limit, (page - 1) * limit);

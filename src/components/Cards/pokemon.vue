@@ -10,8 +10,10 @@
             <v-card-title class="white--text text-md-h6 text-sm-h7 font-weight-bold">
                 {{ pokemon.name | toTitle }}
             </v-card-title>
-            <v-card-subtitle class="text--left">
-                {{ pokemon.name }}
+            <v-card-subtitle class="text-left font-weight-medium">
+                <span v-for="({ type }, index) in PokemonDetail.types" :key="index">
+                    {{ type.name | toTitle }},
+                </span>
             </v-card-subtitle>
         </div>
         <div class="d-flex flex-column align-end">
@@ -31,6 +33,7 @@
 </template>
 
 <script>
+import PokemonService from "@/services/resources/home.service";
 import { DETAIL } from "@/router/name.types";
 import Grass from "@/assets/grass.png";
 
@@ -39,11 +42,34 @@ export default {
         pokemon: { type: Object, required: false }
     },
     data: () => ({
-        backgroundImage: Grass
+        backgroundImage: Grass,
+        PokemonDetail: {
+            types: []
+        }
     }),
     methods: {
         handleClick() {
             this.$router.push({ name: DETAIL.ROOT, params: { id: this.pokemon.id } });
+        },
+        getPokemonDetail(id) {
+            console.log({id});
+            PokemonService.getPokemonDetail(id)
+            .then(({ status, data }) => {
+                if (status == 200) {
+                    this.PokemonDetail = { ...this.PokemonDetail, ...data };
+                }
+            })
+        }
+    },
+    mounted() {
+        this.getPokemonDetail(this.pokemon.id)
+    },
+    watch: {
+        pokemon: {
+            handler(val) {
+                val && this.getPokemonDetail(val.id)
+            },
+            deep: true
         }
     }
 }

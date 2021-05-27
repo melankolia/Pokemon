@@ -1,5 +1,5 @@
 import MainInstance from "../main.instance";
-import { POKEMON } from "../constant";
+import { POKEMON, POKEMON_SPECIES } from "../constant";
 
 const HomeService = {
     getPokemonList(params) {
@@ -7,6 +7,9 @@ const HomeService = {
     },
     getPokemonDetail(id) {
         return MainInstance.fetch(POKEMON, id);
+    },
+    getPokemonSpeciesById(id) {
+        return MainInstance.fetch(POKEMON_SPECIES, id);
     },
     getPokemonSpecies(url) {
         return MainInstance.query(url);

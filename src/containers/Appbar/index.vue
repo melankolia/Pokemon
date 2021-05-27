@@ -7,7 +7,24 @@
       height="50"
     >
       <div class="d-flex align-center">
-        <v-btn icon>
+        <v-btn
+          @click="$router.replace('/')"
+          icon
+          class="ml-4"
+        >
+          <v-img 
+            width="80" 
+            contain 
+            src="@/assets/Pokelogo.png"
+          />
+        </v-btn>
+      </div>
+      <v-spacer></v-spacer>
+      <div class="d-flex align-center">
+        <v-btn 
+          icon
+          @click="$router.replace('/')"
+        >
           <v-img
             alt="Vuetify Logo"
             class="shrink"
@@ -15,17 +32,14 @@
             src="@/assets/pokemon.svg"
             transition="scale-transition"
             width="20"
-            @click="$router.replace('/')"
           />
         </v-btn>
       </div>
-      <v-spacer></v-spacer>
     </v-app-bar>
 </template>
 
 <script>
 export default {
-
 }
 </script>
 
