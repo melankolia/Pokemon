@@ -3,9 +3,9 @@ export const HOME = {
     ROOT: `${home}`
 };
 
-const about = "about";
-export const ABOUT = {
-    ROOT: `${about}`
+const pokedex = "pokedex";
+export const POKEDEX = {
+    ROOT: `${pokedex}`
 };
 
 const detail = "detail";

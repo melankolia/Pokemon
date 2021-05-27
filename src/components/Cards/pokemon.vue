@@ -52,7 +52,6 @@ export default {
             this.$router.push({ name: DETAIL.ROOT, params: { id: this.pokemon.id } });
         },
         getPokemonDetail(id) {
-            console.log({id});
             PokemonService.getPokemonDetail(id)
             .then(({ status, data }) => {
                 if (status == 200) {

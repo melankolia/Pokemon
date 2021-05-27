@@ -68,7 +68,6 @@ export default {
       .then(({ status, data }) => {
         if (status == 200) {
           if (data.chain.evolves_to.length > 0) this.divingData(data.chain);
-          console.log(this.PokemonEvolution)
         }
       })
       .catch(err => console.error(err))

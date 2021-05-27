@@ -151,14 +151,6 @@ export default {
             return Math.round((item * 100) / max)
         }
     },
-    watch: {
-        PokemonDetail: {
-            handler(val) {
-                console.log(val);
-            },
-            deep: true
-        }
-    }
 }
 </script>
 

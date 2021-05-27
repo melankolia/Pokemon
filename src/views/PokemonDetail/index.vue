@@ -64,6 +64,7 @@
           color="white"
           group
           mandatory
+          style="overflow: scroll;"
         >
           <v-btn 
             v-for="(item, index) in items"

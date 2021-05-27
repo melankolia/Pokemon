@@ -1,20 +1,26 @@
 const Home = () => import('@/views/Home.vue');
-const About = () => import('@/views/About.vue');
+const Pokedex = () => import('@/views/Pokedex');
 const Detail = () => import('@/views/PokemonDetail');
 
-import { HOME, ABOUT, DETAIL } from "./name.types";
+import { HOME, POKEDEX, DETAIL } from "./name.types";
 
 export const configRoutes = () => {
   return [
     {
       path: '/',
       name: HOME.ROOT,
-      component: Home
+      component: Home,
+      meta: {
+        index: 0
+      }
     },
     {
-      path: '/about',
-      name: ABOUT.ROOT,
-      component: About
+      path: '/pokedex',
+      name: POKEDEX.ROOT,
+      component: Pokedex,
+      meta: {
+        index: 1
+      }
     },
     {
       path: '/pokemon',
@@ -27,7 +33,10 @@ export const configRoutes = () => {
         {
           path: ':id',
           name: DETAIL.ROOT,
-          component: Detail
+          component: Detail,
+          meta: {
+            index: 1
+          }
         }
       ]
     }

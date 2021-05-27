@@ -1,45 +1,67 @@
 <template>
-      <v-app-bar
+    <v-app-bar
       app
-      color="yellow accent-3"
-      dark
+      color="#f6e652"
       elevate-on-scroll
-      height="50"
+      height="56"
     >
-      <div class="d-flex align-center">
-        <v-btn
-          @click="$router.replace('/')"
-          icon
-          class="ml-4"
-        >
+      <div style="width: 8%">
+        <v-scroll-x-transition>
           <v-img 
+            v-show="notHome"
             width="80" 
             contain 
             src="@/assets/Pokelogo.png"
           />
-        </v-btn>
+        </v-scroll-x-transition>
       </div>
-      <v-spacer></v-spacer>
-      <div class="d-flex align-center">
-        <v-btn 
-          icon
-          @click="$router.replace('/')"
+      <v-tabs
+        v-model="tab"
+        color="#2a3d84"
+        background-color="transparent"
+      >
+        <v-tab
+          v-for="link in links"
+          :key="link"
         >
-          <v-img
-            alt="Vuetify Logo"
-            class="shrink"
-            contain
-            src="@/assets/pokemon.svg"
-            transition="scale-transition"
-            width="20"
-          />
-        </v-btn>
-      </div>
+          {{ link }}
+        </v-tab>
+      </v-tabs>
+      <v-spacer></v-spacer>
+      <v-img
+        alt="Vuetify Logo"
+        class="shrink"
+        contain
+        src="@/assets/pokemon.svg"
+        transition="scale-transition"
+        width="20"
+      />
     </v-app-bar>
 </template>
 
 <script>
+import { HOME, POKEDEX } from "@/router/name.types";
+
 export default {
+  data() {
+    return {
+      links: [HOME.ROOT, POKEDEX.ROOT],
+      tab: 0
+    }
+  },
+  watch: {
+    tab(val) {
+      this.$router.replace({ name: this.links[val] });
+    },
+    $route(to) {
+      this.tab = to.meta.index;
+    }
+  },
+  computed: {
+    notHome() {
+      return this.$route.name !== HOME.ROOT;
+    }
+  }
 }
 </script>
 
