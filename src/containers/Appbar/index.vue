@@ -46,16 +46,14 @@ export default {
   data() {
     return {
       links: [HOME.ROOT, POKEDEX.ROOT],
-      tab: 0
+      tab: this.$route.meta?.index
     }
   },
   watch: {
     tab(val) {
+      this.tab = val;
       this.$router.replace({ name: this.links[val] });
     },
-    $route(to) {
-      this.tab = to.meta.index;
-    }
   },
   computed: {
     notHome() {
