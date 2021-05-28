@@ -47,11 +47,11 @@
     </v-container>
     <v-row class="text-center mt-12 mb-2" align="center" justify="center">
       <v-col cols="12">
-        <v-btn class="mr-4 rounded-lg" :disabled="isFirst" @click="() => page--" color="error">
+        <v-btn class="mr-4 rounded-lg" :disabled="isFirst" :loading="loading" @click="() => page--" color="error">
           <v-icon>navigate_before</v-icon>
           Previous
         </v-btn>
-        <v-btn class="rounded-lg" :disabled="page >= totalPage" @click="() => page++" color="primary">
+        <v-btn class="rounded-lg" :disabled="page >= totalPage" :loading="loading" @click="() => page++" color="primary">
           Next
           <v-icon>navigate_next</v-icon>
         </v-btn>
@@ -64,7 +64,7 @@
 const PokeCard = () => import("@/components/Cards/pokemon");
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import { FETCH_POKEMON_LIST } from "@/store/constant/actions.type";
-import { RESET_STATE } from "@/store/constant/mutations.type";
+import { RESET_STATE, SET_LOADING } from "@/store/constant/mutations.type";
 
 export default {
   components: {
@@ -83,31 +83,30 @@ export default {
   }),
   methods: {
     ...mapActions({fetchData: FETCH_POKEMON_LIST}),
-    ...mapMutations({resetState: RESET_STATE}),
-    getList(limit = 8, page = 1) {
+    ...mapMutations({resetState: RESET_STATE, setLoading: SET_LOADING}),
+    getList(type = "Pagination", limit = 8, page = 1) {
+      console.log({type})
       const result = this.getPokemonList(limit, (page - 1) * limit);
-      
       this.listPokemon = [...result.listPokemon];
-      this.filtering = false;
       this.totalPage = result.totalPage;
     },
-    filterData(val, limit = 20, page = 1) {
+    filterData(type = "Pagination", val, limit = this.limit, page = 1) {
+      console.log({type, val})
       const { listPokemon, totalPage, stop } = this.filteringData(val, limit, (page - 1) * limit);
 
       if (listPokemon.length < 1) {
-        if (!stop) this.fetchingData(() => this.filterData(this.search, this.limit));
-        else if (stop) this.fetchingData();
+        if (!stop) this.fetchingData(() => this.filterData(type, val, limit));
+        else return
+        // else if (stop) this.getList()
       } else {
         this.listPokemon = [...listPokemon];
-        this.filtering = true;
         this.totalPage = totalPage;
       }
     },
     fetchingData(callback) {
       this.fetchData()
       .then(() => {
-        this.getList(this.limit, this.page);
-        callback && callback();
+        callback ? callback() : this.getList("Fetching : ", this.limit, this.page);
       })
       .catch(err => console.error(err));
     }
@@ -117,14 +116,16 @@ export default {
   },
   watch: {
     search(val) {
+      // console.log({search: val})
       this.page = 1;
-      this.debounce(() => val ? this.filterData(val) : this.getList());
+      this.debounce(() => val ? this.filterData("search :", val) : this.getList("search :"));
     },
     select(val) {
-      val && this.filterData(val)
+      // console.log({select: val})
+      val && this.filterData("select :", val)
     },
     page(val) {
-      val && this.filtering ? this.filterData(this.search, this.limit, val) : this.getList(this.limit, val);
+      val && this.search ? this.filterData("Pagination : ", this.search, this.limit, val) : this.getList("Pagination : ", this.limit, val);
     },
     loading(val) {
       !val && (this.itemSearch = [...this.getAllPokemonList]);
