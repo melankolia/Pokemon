@@ -84,18 +84,18 @@ export default {
   methods: {
     ...mapActions({fetchData: FETCH_POKEMON_LIST}),
     ...mapMutations({resetState: RESET_STATE, setLoading: SET_LOADING}),
-    getList(type = "Pagination", limit = 8, page = 1) {
-      console.log({type})
+    getList(limit = 8, page = 1) {
+      // console.log({type})
       const result = this.getPokemonList(limit, (page - 1) * limit);
       this.listPokemon = [...result.listPokemon];
       this.totalPage = result.totalPage;
     },
-    filterData(type = "Pagination", val, limit = this.limit, page = 1) {
-      console.log({type, val})
+    filterData(val, limit = this.limit, page = 1) {
+      // console.log({type, val})
       const { listPokemon, totalPage, stop } = this.filteringData(val, limit, (page - 1) * limit);
 
       if (listPokemon.length < 1) {
-        if (!stop) this.fetchingData(() => this.filterData(type, val, limit));
+        if (!stop) this.fetchingData(() => this.filterData(val, limit));
         else return
         // else if (stop) this.getList()
       } else {
@@ -106,7 +106,8 @@ export default {
     fetchingData(callback) {
       this.fetchData()
       .then(() => {
-        callback ? callback() : this.getList("Fetching : ", this.limit, this.page);
+        callback ? callback() : this.getList(this.limit, this.page);
+        this.itemSearch = [...this.getAllPokemonList];
       })
       .catch(err => console.error(err));
     }
@@ -118,18 +119,15 @@ export default {
     search(val) {
       // console.log({search: val})
       this.page = 1;
-      this.debounce(() => val ? this.filterData("search :", val) : this.getList("search :"));
+      this.debounce(() => val ? this.filterData(val) : this.getList());
     },
     select(val) {
       // console.log({select: val})
-      val && this.filterData("select :", val)
+      val && this.filterData(val)
     },
     page(val) {
-      val && this.search ? this.filterData("Pagination : ", this.search, this.limit, val) : this.getList("Pagination : ", this.limit, val);
+      val && this.search ? this.filterData(this.search, this.limit, val) : this.getList(this.limit, val);
     },
-    loading(val) {
-      !val && (this.itemSearch = [...this.getAllPokemonList]);
-    }
   },
   computed: {
     ...mapGetters({ 
